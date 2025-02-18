@@ -271,17 +271,17 @@
    ```
    components/chat/ui/
    ├── message-list.tsx
-   ├── message-list.test.tsx      # Unit tests
-   ├── message-list.e2e.test.ts   # Integration tests
+   ├── message-list.unit.test.tsx    # Unit tests
+   ├── message-list.e2e.test.tsx     # Integration tests
    ├── message-input.tsx
-   ├── message-input.test.tsx
-   └── message-input.e2e.test.ts
+   ├── message-input.unit.test.tsx
+   └── message-input.e2e.test.tsx
    ```
 
 2. Test File Naming Convention
 
-   - Unit Tests: `[component-name].test.tsx`
-   - Integration Tests: `[component-name].e2e.test.ts`
+   - Unit Tests: `[component-name].unit.test.tsx`
+   - Integration Tests: `[component-name].e2e.test.tsx`
    - Test Utils: `[name].test-utils.ts`
 
 3. TDD Implementation Rules
