@@ -1,7 +1,7 @@
 import type { MDXComponents } from "mdx/types";
-import Image from "next/image";
+import Image, { type ImageProps } from "next/image";
 import Link from "next/link";
-import type { ImageProps } from "next/image";
+import type { DetailedHTMLProps, ImgHTMLAttributes } from "react";
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -18,15 +18,27 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </Link>
     ),
-    img: ({ src, alt, ...props }: ImageProps) => (
-      <Image
-        src={src}
-        alt={alt || ""}
-        sizes="100vw"
-        style={{ width: "100%", height: "auto" }}
-        {...props}
-      />
-    ),
+    img: (
+      props: DetailedHTMLProps<
+        ImgHTMLAttributes<HTMLImageElement>,
+        HTMLImageElement
+      >
+    ) => {
+      const { src, alt, ...rest } = props;
+      if (!src) return null;
+
+      return (
+        <Image
+          src={src}
+          alt={alt || ""}
+          sizes="100vw"
+          width={0}
+          height={0}
+          style={{ width: "100%", height: "auto" }}
+          {...rest}
+        />
+      );
+    },
     ...components,
   };
 }

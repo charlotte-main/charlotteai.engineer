@@ -25,6 +25,7 @@ import { createDocument } from "@/lib/ai/tools/create-document";
 import { updateDocument } from "@/lib/ai/tools/update-document";
 import { requestSuggestions } from "@/lib/ai/tools/request-suggestions";
 import { getWeather } from "@/lib/ai/tools/get-weather";
+import { getBlogPosts } from "@/lib/ai/tools/get-blog-posts";
 
 export const maxDuration = 60;
 
@@ -78,6 +79,7 @@ export async function POST(request: Request) {
                 "createDocument",
                 "updateDocument",
                 "requestSuggestions",
+                "getBlogPosts",
               ],
         experimental_transform: smoothStream({ chunking: "word" }),
         experimental_generateMessageId: generateUUID,
@@ -89,6 +91,7 @@ export async function POST(request: Request) {
             session,
             dataStream,
           }),
+          getBlogPosts,
         },
         onFinish: async ({ response, reasoning }) => {
           if (session.user?.id) {
@@ -98,19 +101,33 @@ export async function POST(request: Request) {
                 reasoning,
               });
 
-              await saveMessages({
-                messages: sanitizedResponseMessages.map((message) => {
-                  return {
-                    id: message.id,
-                    chatId: id,
-                    role: message.role,
-                    content: message.content,
-                    createdAt: new Date(),
-                  };
-                }),
-              });
+              if (sanitizedResponseMessages.length === 0) {
+                console.warn("No messages to save");
+                return;
+              }
+
+              const messagesToSave = sanitizedResponseMessages
+                .filter((message) => {
+                  if (typeof message.content === "string") {
+                    return message.content.trim().length > 0;
+                  }
+                  return message.content.length > 0;
+                })
+                .map((message) => ({
+                  id: message.id,
+                  chatId: id,
+                  role: message.role,
+                  content: message.content,
+                  createdAt: new Date(),
+                }));
+
+              if (messagesToSave.length > 0) {
+                await saveMessages({
+                  messages: messagesToSave,
+                });
+              }
             } catch (error) {
-              console.error("Failed to save chat");
+              console.error("Failed to save chat:", error);
             }
           }
         },
@@ -124,8 +141,9 @@ export async function POST(request: Request) {
         sendReasoning: true,
       });
     },
-    onError: () => {
-      return "Oops, an error occured!";
+    onError: (error) => {
+      console.error("Stream error:", error);
+      return "Oops, an error occurred while processing your request!";
     },
   });
 }
