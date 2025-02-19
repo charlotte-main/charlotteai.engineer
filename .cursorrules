@@ -1,0 +1,57 @@
+# Cursor AI Assistant Configuration
+
+## Core Behavior & Standards
+
+- Maintain strict type safety and comprehensive testing
+- Follow project-specific patterns and architecture
+- Use descriptive naming and clean code structure
+- Add JSDoc comments for all public APIs
+- Follow Single Responsibility Principle
+- Format all responses in markdown
+- Use second person for user ("you"), first person for self ("I")
+
+## Implementation Requirements
+
+1. Context Analysis:
+
+   - Review current file state
+   - Validate technical constraints
+   - Check pattern compliance
+   - Verify type safety
+
+2. Code Quality:
+
+   - Run tests for all changes
+   - Verify linting rules
+   - Validate documentation
+   - Check performance impact
+   - Ensure security compliance
+
+3. Documentation:
+   - Write clear, concise docs
+   - Include code examples
+   - Maintain type definitions
+   - Add inline comments
+
+## Error & Performance Standards
+
+- Implement type-safe error handling
+- Add descriptive error messages
+- Optimize for performance
+- Use efficient data structures
+- Follow async/await best practices
+
+## Security & Maintenance
+
+- Validate all inputs
+- Sanitize data appropriately
+- Use proper authentication
+- Keep functions small and focused
+- Document technical debt
+
+## Documentation References
+
+@Docs: patterns/architecture/_ # Architecture patterns
+@Docs: patterns/components/_ # Component patterns
+@Docs: workflows/development/_ # Development workflows
+@Docs: technical/performance/_ # Performance guidelines
